@@ -60,7 +60,12 @@ public class TaskDate {
 		}
 
 	}
-
+	/**
+	 * 
+	 * @param test is a given user date input
+	 * @return the validity of the user date input by passing it to methods of different regex
+	 * @throws java.text.ParseException
+	 */
 	public boolean isValidDate(String test) throws java.text.ParseException {
 		if(test.equals("today") || test.equals("tomorrow")) {
 			return true;
@@ -80,6 +85,13 @@ public class TaskDate {
 		else
 			return false;
 	}
+	/**
+	 * 
+	 * @param test is the user date input
+	 * @param format is the type of format the user has chosen to input
+	 * @return the validity of format of the user date input and validity i.e. existence of the date input
+	 * @throws java.text.ParseException
+	 */
 	public boolean isValidAlphaDate(String test, String format) throws java.text.ParseException {
 		Date tempDate = null;
 
@@ -106,7 +118,7 @@ public class TaskDate {
 			String tempToGetMonth;
 			String[] splitted = test.split("\\s+");
 			tempToGetMonth = splitted[0];
-			Date dateToGetMonth = new SimpleDateFormat("MMMM", Locale.ENGLISH).parse(tempToGetMonth);
+			Date dateToGetMonth = new SimpleDateFormat("MMMMM", Locale.ENGLISH).parse(tempToGetMonth);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(dateToGetMonth);
 			int month = cal.get(Calendar.MONTH);
@@ -121,7 +133,7 @@ public class TaskDate {
 			String tempToGetMonth;
 			String[] splitted = test.split("\\s+");
 			tempToGetMonth = splitted[0];
-			Date dateToGetMonth = new SimpleDateFormat("MMMM", Locale.ENGLISH).parse(tempToGetMonth);
+			Date dateToGetMonth = new SimpleDateFormat("MMMMM", Locale.ENGLISH).parse(tempToGetMonth);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(dateToGetMonth);
 			int month = cal.get(Calendar.MONTH);
