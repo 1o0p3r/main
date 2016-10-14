@@ -1,5 +1,6 @@
 package seedu.whatnow.logic.commands;
 
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,25 +25,41 @@ public class AddCommand extends Command {
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists in WhatNow";
 
     private final Task toAdd;
+    private final Deadline deadlineToAdd;
 
     /**
      * Convenience constructor using raw values.
      *
      * @throws IllegalValueException if any of the raw values are invalid
+     * @throws ParseException 
      */
-    public AddCommand(String name, String taskDate, Set<String> tags)
-            throws IllegalValueException {
+    public AddCommand(String name, Set<String> taskDate, Set<String> tags)
+            throws IllegalValueException, ParseException {
+        final Set<TaskDate> TaskDateSet = new HashSet<>();
+    	final Set<Tag> tagSet = new HashSet<>();
+        for (String tagName : tags) {
+            tagSet.add(new Tag(tagName));
+        }
+        this.deadlineToAdd = new Deadline(
+                new Name(name),
+                new TaskDate(taskDate),
+                new UniqueTagList(tagSet)
+        );
+    }
+    /**
+     * Constructor for a task
+     * 
+     */
+    public AddCommand(String name, Set<String> tags) throws IllegalValueException, ParseException {
         final Set<Tag> tagSet = new HashSet<>();
         for (String tagName : tags) {
             tagSet.add(new Tag(tagName));
         }
         this.toAdd = new Task(
                 new Name(name),
-                new TaskDate(taskDate);
                 new UniqueTagList(tagSet)
         );
     }
-
     @Override
     public CommandResult execute() {
         assert model != null;

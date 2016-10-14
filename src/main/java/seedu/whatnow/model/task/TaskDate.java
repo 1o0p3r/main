@@ -3,6 +3,7 @@ package seedu.whatnow.model.task;
 import seedu.whatnow.commons.exceptions.IllegalValueException;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
 
 import org.hamcrest.generator.qdox.parser.ParseException;
 
@@ -37,26 +38,26 @@ public class TaskDate {
 	 *
 	 * @throw IllegalValueException if given date is invalid
 	 */
-	public TaskDate(String date) throws IllegalValueException, java.text.ParseException {
-		assert date != null;
-		date = date.trim();
-		if(!isValidDate(date)) {
+	public TaskDate(Set<String> taskDate) throws IllegalValueException, java.text.ParseException {
+		assert taskDate != null;
+		taskDate = taskDate.trim();
+		if(!isValidDate(taskDate)) {
 			throw new IllegalValueException(MESSAGE_NAME_CONSTRAINTS);
 		}
 		//Formats the date to be today's date
-		if(date.equals("today")) {
+		if(taskDate.equals("today")) {
 			DateFormat dateFormat = new SimpleDateFormat(DATE_NUM_SLASH_WITH_YEAR_FORMAT);
 			Calendar cal = Calendar.getInstance();
-			date = dateFormat.format(cal.getTime());
-			fullDate = date;
+			taskDate = dateFormat.format(cal.getTime());
+			fullDate = taskDate;
 		}
 		//Formats the date to be tomorrow's date
-		else if(date.equals("tomorrow")) {
+		else if(taskDate.equals("tomorrow")) {
 			DateFormat dateFormat2 = new SimpleDateFormat(DATE_NUM_SLASH_WITH_YEAR_FORMAT);
 			Calendar cal2 = Calendar.getInstance();
 			cal2.add(Calendar.DATE, 1);
-			date = dateFormat2.format(cal2.getTime());
-			fullDate= date;
+			taskDate = dateFormat2.format(cal2.getTime());
+			fullDate= taskDate;
 		}
 
 	}

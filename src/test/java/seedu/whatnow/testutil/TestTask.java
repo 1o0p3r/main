@@ -6,7 +6,7 @@ import seedu.whatnow.model.task.*;
 /**
  * A mutable task object. For testing only.
  */
-public class TestTask implements ReadOnlyTask {
+public abstract class TestTask implements ReadOnlyTask {
 
     private Name name;
     private UniqueTagList tags;

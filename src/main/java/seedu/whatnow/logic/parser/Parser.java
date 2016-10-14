@@ -108,17 +108,15 @@ public class Parser {
      * @return the prepared command
      */
     private Command prepareAdd(String args){
-        final Matcher matcher = TASK_DATA_MODIFIED_ARGS_FORMAT.matcher(args.trim());
-        final Matcher matcher2 = TASK_DATA_MODIFIED2_ARGS_FORMAT.matcher(args.trim());
-        final Matcher matcher3 = TASK_DATA_MODIFIED3_ARGS_FORMAT.matcher(args.trim());
+        final Matcher matcher = TASK_DATA_ARGS_FORMAT.matcher(args.trim());
+
         // Validate arg string format
-        if (!matcher.matches() && !matcher2.matches() && !matcher3.matches()) {
+        if (!matcher.matches()) {
             return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
         try {
             return new AddCommand(
                     matcher.group("name"),
-                    getDateFromArgs(matcher.group("dateArguments")),
                     getTagsFromArgs(matcher.group("tagArguments"))
             );
         } catch (IllegalValueException ive) {
@@ -126,10 +124,27 @@ public class Parser {
         }
     }
     
-    private static set<String> getDateFromArgs(String dateArguments) throws IllegalValueException {
+    private Command prepareAddDeadline(String args) {
+    	  final Matcher matcher = TASK_DATA_MODIFIED_ARGS_FORMAT.matcher(args.trim());
+          final Matcher matcher2 = TASK_DATA_MODIFIED2_ARGS_FORMAT.matcher(args.trim());
+          final Matcher matcher3 = TASK_DATA_MODIFIED3_ARGS_FORMAT.matcher(args.trim());
+          // Validate arg string format
+          if (!matcher.matches() && !matcher2.matches() && !matcher3.matches()) {
+              return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+          }
+          try {
+              return new AddCommand(
+                      matcher.group("name"),
+                      getDateFromArgs(matcher.group("dateArguments")),
+                      getTagsFromArgs(matcher.group("tagArguments"))
+              );
+          } catch (IllegalValueException ive) {
+              return new IncorrectCommand(ive.getMessage());
+          }
+    }
+    private static Set<String> getDateFromArgs(String dateArguments) throws IllegalValueException {
     	//no date
     	if(dateArguments.isEmpty()) {
-    		
     		return Collections.emptySet();
     	}
     }

@@ -9,21 +9,19 @@ import seedu.whatnow.model.tag.UniqueTagList;
  * Represents a Task in WhatNow.
  * Guarantees: details are present and not null, field values are validated.
  */
-public class Task implements ReadOnlyTask {
+public class Task extends BasicTask{
 
     private Name name;
-    
-    private TaskDate taskDate;
     
     private UniqueTagList tags;
 
     /**
      * Every field must be present and not null.
      */
-    public Task(Name name, TaskDate taskDate, UniqueTagList tags) {
-        assert !CollectionUtil.isAnyNull(name, tags);
+    public Task(Name name, UniqueTagList tags) {
+        super(name);
+    	assert !CollectionUtil.isAnyNull(name, tags);
         this.name = name;
-        this.taskDate = taskDate;
         this.tags = new UniqueTagList(tags); // protect internal tags from changes in the arg list
     }
 
@@ -31,13 +29,9 @@ public class Task implements ReadOnlyTask {
      * Copy constructor.
      */
     public Task(ReadOnlyTask source) {
-        this(source.getName(), source.getTask(), source.getTags());
+        this(source.getName(), source.getTags());
     }
     
-    @Override
-    public TaskDate getTask() {
-    	return taskDate;
-    }
     @Override
     public Name getName() {
         return name;
@@ -55,29 +49,10 @@ public class Task implements ReadOnlyTask {
         tags.setTags(replacement);
     }
     
-    public void setName(Name name) {
-        this.name = name;
-    }
-    public void setDate(TaskDate taskDate) {
-    	this.taskDate = taskDate;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return other == this // short circuit if same object
-                || (other instanceof ReadOnlyTask // instanceof handles nulls
-                && this.isSameStateAs((ReadOnlyTask) other));
-    }
-
-    @Override
-    public int hashCode() {
-        // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, tags);
-    }
-
-    @Override
-    public String toString() {
-        return getAsText();
-    }
+	@Override
+	public TaskDate getTask() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
