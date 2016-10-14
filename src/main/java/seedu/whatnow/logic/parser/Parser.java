@@ -29,7 +29,22 @@ public class Parser {
     private static final Pattern TASK_DATA_ARGS_FORMAT = // '/' forward slashes are reserved for delimiter prefixes
             Pattern.compile("(?<name>[^/]+)"
                     + "(?<tagArguments>(?: t/[^/]+)*)"); // variable number of tags
-    
+    private static final Pattern TASK_DATA_MODIFIED_ARGS_FORMAT =
+    		Pattern.compile("(?<name>[^/]+)" +"\\s" 
+    				+".*?\\bon|by\\b.*?" +"\\s" +
+    				"(?<dateArguments>[^/]+)" +
+    				"(?<tagArguments>(?: t/[^/]+)*)");		//This pattern is for e.g. add task on/by 12/10/2016
+    														//add task on/by today
+    private static final Pattern TASK_DATA_MODIFIED2_ARGS_FORMAT =
+    		Pattern.compile("(?<name>[^/]+)" +"\\s" 
+    				+".*?\\bon|by\\b.*?" +"\\s" +
+    				"(?<dateArguments>[^/]+)" + "(?<dateArguments>[^/]+)" +
+    				"(?<tagArguments>(?: t/[^/]+)*)");		//This pattern is for e.g. add task on/by 12 january
+    private static final Pattern TASK_DATA_MODIFIED3_ARGS_FORMAT =
+    		Pattern.compile("(?<name>[^/]+)" +"\\s" 
+    				+".*?\\bon|by\\b.*?" +"\\s" +
+    				"(?<dateArguments>[^/]+)" + "(?<dateArguments>[^/]+)" + "(?<dateArguments>[^/]+)" +
+    				"(?<tagArguments>(?: t/[^/]+)*)");		//This pattern is for e.g. add task on/by 12 january 2016
     private static final int TASK_TYPE = 0;
     private static final int INDEX = 1;
     private static final int ARG_TYPE = 2;
@@ -93,21 +108,31 @@ public class Parser {
      * @return the prepared command
      */
     private Command prepareAdd(String args){
-        final Matcher matcher = TASK_DATA_ARGS_FORMAT.matcher(args.trim());
+        final Matcher matcher = TASK_DATA_MODIFIED_ARGS_FORMAT.matcher(args.trim());
+        final Matcher matcher2 = TASK_DATA_MODIFIED2_ARGS_FORMAT.matcher(args.trim());
+        final Matcher matcher3 = TASK_DATA_MODIFIED3_ARGS_FORMAT.matcher(args.trim());
         // Validate arg string format
-        if (!matcher.matches()) {
+        if (!matcher.matches() && !matcher2.matches() && !matcher3.matches()) {
             return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
         try {
             return new AddCommand(
                     matcher.group("name"),
+                    getDateFromArgs(matcher.group("dateArguments")),
                     getTagsFromArgs(matcher.group("tagArguments"))
             );
         } catch (IllegalValueException ive) {
             return new IncorrectCommand(ive.getMessage());
         }
     }
-
+    
+    private static set<String> getDateFromArgs(String dateArguments) throws IllegalValueException {
+    	//no date
+    	if(dateArguments.isEmpty()) {
+    		
+    		return Collections.emptySet();
+    	}
+    }
     /**
      * Extracts the new task's tags from the add command's tag arguments string.
      * Merges duplicate tag strings.
@@ -135,7 +160,6 @@ public class Parser {
             return new IncorrectCommand(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         }
-
         return new DeleteCommand(index.get());
     }
     
