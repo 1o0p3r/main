@@ -64,7 +64,7 @@ public class UniqueTaskList implements Iterable<Task> {
         if (contains(toAdd)) {
             throw new DuplicateTaskException();
         }
-        reqStack.add(internalList);
+        reqStack.push(internalList);
         internalList.add(toAdd);
     }
 
@@ -75,7 +75,7 @@ public class UniqueTaskList implements Iterable<Task> {
      */
     public boolean remove(ReadOnlyTask toRemove) throws TaskNotFoundException {
         assert toRemove != null;
-        reqStack.add(internalList);
+        reqStack.push(internalList);
         final boolean taskFoundAndDeleted = internalList.remove(toRemove);
         if (!taskFoundAndDeleted) {
             throw new TaskNotFoundException();
@@ -89,7 +89,7 @@ public class UniqueTaskList implements Iterable<Task> {
      * @throws TaskNotFoundException if no such task could be found in the list.
      */
     public boolean update(ReadOnlyTask old, Task toUpdate) throws TaskNotFoundException {
-        reqStack.add( internalList);
+        reqStack.push(internalList);
     	assert old != null;
         final boolean taskFoundAndUpdated = internalList.contains(old);
         if (!taskFoundAndUpdated) {
@@ -111,18 +111,26 @@ public class UniqueTaskList implements Iterable<Task> {
     		throw new NoPrevCommandFoundException();
     	}
     	else {
+    		System.out.println("reqStack.peek() is : " + reqStack.peek());
     		internalList = reqStack.pop();
     		return true;
     	}
     }
+    
     public static ObservableList<Task> getInternalList() {
         return internalList;
     }
-    
-    /*
-    private void ObservableList<Task> void setInternalList(ObservableList<Task> newInternalList) {
-    	this.internalList = newInternalList;
-    }*/
+    public Stack <ObservableList<Task>> getRequiredStack() {
+    	return this.reqStack;
+    }
+    public static void emptyRequiredStack() {
+    	if(reqStack.isEmpty()) {
+    		System.out.println("reStack is Empty");
+    	}
+    	while(!reqStack.isEmpty()) {
+    		reqStack.pop();
+    	}
+    }
     @Override
     public Iterator<Task> iterator() {
         return internalList.iterator();
@@ -140,4 +148,6 @@ public class UniqueTaskList implements Iterable<Task> {
     public int hashCode() {
         return internalList.hashCode();
     }
+    
+  
 }

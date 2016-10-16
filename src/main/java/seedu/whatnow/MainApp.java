@@ -15,6 +15,7 @@ import seedu.whatnow.commons.util.StringUtil;
 import seedu.whatnow.logic.Logic;
 import seedu.whatnow.logic.LogicManager;
 import seedu.whatnow.model.*;
+import seedu.whatnow.model.task.UniqueTaskList;
 import seedu.whatnow.storage.Storage;
 import seedu.whatnow.storage.StorageManager;
 import seedu.whatnow.ui.Ui;
@@ -60,6 +61,8 @@ public class MainApp extends Application {
         logic = new LogicManager(model, storage);
 
         ui = new UiManager(logic, config, userPrefs);
+        
+        UniqueTaskList.emptyRequiredStack();
 
         initEventsCenter();
     }

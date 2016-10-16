@@ -90,6 +90,7 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public synchronized void undoCommand() throws NoPrevCommandFoundException {
     	whatNow.undoCommand();
+    	updateFilteredListToShowAll();
     	indicateWhatNowChanged();
     }
 

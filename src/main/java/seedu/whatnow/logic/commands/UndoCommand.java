@@ -32,7 +32,6 @@ public class UndoCommand extends Command{
 		}catch (UniqueTaskList.NoPrevCommandFoundException e) {
 			return new CommandResult(MESSAGE_DUPLICATE_TASK);
 		}
-
 	}	
 
 }
