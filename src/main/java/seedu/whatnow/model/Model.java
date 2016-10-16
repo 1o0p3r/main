@@ -3,11 +3,13 @@ package seedu.whatnow.model;
 import java.util.Set;
 import java.util.Stack;
 
+import javafx.collections.transformation.FilteredList;
 import seedu.whatnow.commons.core.UnmodifiableObservableList;
 import seedu.whatnow.model.task.ReadOnlyTask;
 import seedu.whatnow.model.task.Task;
-import seedu.whatnow.model.task.Tracker;
+
 import seedu.whatnow.model.task.UniqueTaskList;
+import seedu.whatnow.model.task.UniqueTaskList.NoPrevCommandFoundException;
 
 /**
  * The API of the Model component.
@@ -37,6 +39,7 @@ public interface Model {
     /** Update the given task */
     void updateTask(ReadOnlyTask old, Task toUpdate) throws UniqueTaskList.TaskNotFoundException;
     
-    /** Undo Previous Command */
-    void undoCommand(Stack<Tracker> stackOfTracker);
+    /** Undo Previous Command 
+     * @throws NoPrevCommandFoundException */
+    void undoCommand(Stack<FilteredList<Task>> stackOfFilteredTasks) throws NoPrevCommandFoundException;
 }

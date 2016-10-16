@@ -8,8 +8,8 @@ import seedu.whatnow.commons.events.model.WhatNowChangedEvent;
 import seedu.whatnow.commons.util.StringUtil;
 import seedu.whatnow.model.task.ReadOnlyTask;
 import seedu.whatnow.model.task.Task;
-import seedu.whatnow.model.task.Tracker;
 import seedu.whatnow.model.task.UniqueTaskList;
+import seedu.whatnow.model.task.UniqueTaskList.NoPrevCommandFoundException;
 import seedu.whatnow.model.task.UniqueTaskList.TaskNotFoundException;
 
 import java.util.Set;
@@ -25,6 +25,7 @@ public class ModelManager extends ComponentManager implements Model {
 
     private final WhatNow whatNow;
     private final FilteredList<Task> filteredTasks;
+    private Stack<FilteredList<Task>> tempTasks;
 
     /**
      * Initializes a ModelManager with the given WhatNow
@@ -39,6 +40,7 @@ public class ModelManager extends ComponentManager implements Model {
 
         whatNow = new WhatNow(src);
         filteredTasks = new FilteredList<>(whatNow.getTasks());
+        tempTasks.push(filteredTasks);		//To have the original state present
     }
 
     public ModelManager() {
@@ -86,8 +88,9 @@ public class ModelManager extends ComponentManager implements Model {
     }
     
     @Override
-    public synchronized void undoCommand(Stack<Tracker> stackOfTracker) {
-    	
+    public synchronized void undoCommand(Stack<FilteredList<Task>> stackOfFilteredTasks) throws NoPrevCommandFoundException {
+    	whatNow.undoCommand(stackOfFilteredTasks);
+    	indicateWhatNowChanged();
     }
 
     //=========== Filtered Task List Accessors ===============================================================

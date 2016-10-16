@@ -2,6 +2,7 @@ package seedu.whatnow.model.task;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import seedu.whatnow.commons.exceptions.DuplicateDataException;
 import seedu.whatnow.commons.util.CollectionUtil;
 
@@ -31,8 +32,13 @@ public class UniqueTaskList implements Iterable<Task> {
      * there is no such matching task in the list.
      */
     public static class TaskNotFoundException extends Exception {}
-
-    private final ObservableList<Task> internalList = FXCollections.observableArrayList();
+    
+    /**
+     * Signals that there is no more previous commands that were entered
+     */
+    public static class NoPrevCommandFoundException extends Exception{}
+    
+    private static ObservableList<Task> internalList = FXCollections.observableArrayList();
 
     /**
      * Constructs empty TaskList.
@@ -89,11 +95,29 @@ public class UniqueTaskList implements Iterable<Task> {
         return taskFoundAndUpdated;
     }
     
-
-    public ObservableList<Task> getInternalList() {
+    /**
+     * Reverts back to the state before the previous command in WhatNow
+     * @throws NoPrevCommandFoundException 
+     * 
+     */
+    public boolean undo(Stack<FilteredList<Task>> stackOfFilteredTasks) throws NoPrevCommandFoundException{
+    	FilteredList<Task> tempFilteredTask = stackOfFilteredTasks.pop();
+    	if(stackOfFilteredTasks.isEmpty()) {
+    		throw new NoPrevCommandFoundException();
+    	}
+    	else {
+    		internalList = tempFilteredTask;
+    		return true;
+    	}
+    }
+    public static ObservableList<Task> getInternalList() {
         return internalList;
     }
-
+    
+    /*
+    private void ObservableList<Task> void setInternalList(ObservableList<Task> newInternalList) {
+    	this.internalList = newInternalList;
+    }*/
     @Override
     public Iterator<Task> iterator() {
         return internalList.iterator();

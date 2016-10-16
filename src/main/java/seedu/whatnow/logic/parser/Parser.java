@@ -81,13 +81,14 @@ public class Parser {
             
         case UpdateCommand.COMMAND_WORD:
             return prepareUpdate(arguments);
-
+        case UndoCommand.COMMAND_WORD:
+        	return new UndoCommand();
         default:
             return new IncorrectCommand(MESSAGE_UNKNOWN_COMMAND);
         }
     }
 
-    /**
+	/**
      * Parses arguments in the context of the add task command.
      *
      * @param args full command args string
