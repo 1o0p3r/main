@@ -41,5 +41,5 @@ public interface Model {
     
     /** Undo Previous Command 
      * @throws NoPrevCommandFoundException */
-    void undoCommand(Stack<FilteredList<Task>> stackOfFilteredTasks) throws NoPrevCommandFoundException;
+    void undoCommand() throws NoPrevCommandFoundException;
 }

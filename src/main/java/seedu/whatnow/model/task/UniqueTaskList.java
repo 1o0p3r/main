@@ -39,7 +39,8 @@ public class UniqueTaskList implements Iterable<Task> {
     public static class NoPrevCommandFoundException extends Exception{}
     
     private static ObservableList<Task> internalList = FXCollections.observableArrayList();
-
+    
+    private static Stack<ObservableList<Task>> reqStack = new Stack<>();
     /**
      * Constructs empty TaskList.
      */
@@ -63,6 +64,7 @@ public class UniqueTaskList implements Iterable<Task> {
         if (contains(toAdd)) {
             throw new DuplicateTaskException();
         }
+        reqStack.add(internalList);
         internalList.add(toAdd);
     }
 
@@ -73,6 +75,7 @@ public class UniqueTaskList implements Iterable<Task> {
      */
     public boolean remove(ReadOnlyTask toRemove) throws TaskNotFoundException {
         assert toRemove != null;
+        reqStack.add(internalList);
         final boolean taskFoundAndDeleted = internalList.remove(toRemove);
         if (!taskFoundAndDeleted) {
             throw new TaskNotFoundException();
@@ -86,12 +89,14 @@ public class UniqueTaskList implements Iterable<Task> {
      * @throws TaskNotFoundException if no such task could be found in the list.
      */
     public boolean update(ReadOnlyTask old, Task toUpdate) throws TaskNotFoundException {
-        assert old != null;
+        reqStack.add( internalList);
+    	assert old != null;
         final boolean taskFoundAndUpdated = internalList.contains(old);
         if (!taskFoundAndUpdated) {
             throw new TaskNotFoundException();
         }
         internalList.set(internalList.indexOf(old), toUpdate);
+        
         return taskFoundAndUpdated;
     }
     
@@ -100,13 +105,13 @@ public class UniqueTaskList implements Iterable<Task> {
      * @throws NoPrevCommandFoundException 
      * 
      */
-    public boolean undo(Stack<FilteredList<Task>> stackOfFilteredTasks) throws NoPrevCommandFoundException{
-    	FilteredList<Task> stackOfFilteredTasks = internalList;
-    	if(stackOfFilteredTasks.isEmpty()) {
+    public boolean undo() throws NoPrevCommandFoundException{
+    	
+    	if(reqStack.isEmpty()) {
     		throw new NoPrevCommandFoundException();
     	}
     	else {
-    		internalList = tempFilteredTask;
+    		internalList = reqStack.pop();
     		return true;
     	}
     }

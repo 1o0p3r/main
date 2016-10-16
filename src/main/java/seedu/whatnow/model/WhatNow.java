@@ -120,8 +120,8 @@ public class WhatNow implements ReadOnlyWhatNow {
             throw new UniqueTaskList.TaskNotFoundException();
         }
     }
-    public boolean undoCommand(Stack<FilteredList<Task>> stackOfFilteredTasks) throws UniqueTaskList.NoPrevCommandFoundException{
-    	if(tasks.undo(stackOfFilteredTasks)) {
+    public boolean undoCommand() throws UniqueTaskList.NoPrevCommandFoundException{
+    	if(tasks.undo()) {
     		return true;
     	}
     	else {

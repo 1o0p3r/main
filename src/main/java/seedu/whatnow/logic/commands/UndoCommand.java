@@ -27,12 +27,12 @@ public class UndoCommand extends Command{
 		// TODO Auto-generated method stub
 		assert model != null;
 		try{
-			model.undoCommand(tempTasks);
+			model.undoCommand();
 			return new CommandResult(String.format(MESSAGE_SUCCESS, tempTasks));
 		}catch (UniqueTaskList.NoPrevCommandFoundException e) {
 			return new CommandResult(MESSAGE_DUPLICATE_TASK);
 		}
 
-	}
+	}	
 
 }

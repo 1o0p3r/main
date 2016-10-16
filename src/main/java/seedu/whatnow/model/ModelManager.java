@@ -88,8 +88,8 @@ public class ModelManager extends ComponentManager implements Model {
     }
     
     @Override
-    public synchronized void undoCommand(Stack<FilteredList<Task>> stackOfFilteredTasks) throws NoPrevCommandFoundException {
-    	whatNow.undoCommand(stackOfFilteredTasks);
+    public synchronized void undoCommand() throws NoPrevCommandFoundException {
+    	whatNow.undoCommand();
     	indicateWhatNowChanged();
     }
 
