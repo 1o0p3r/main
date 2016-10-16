@@ -8,10 +8,12 @@ import seedu.whatnow.commons.events.model.WhatNowChangedEvent;
 import seedu.whatnow.commons.util.StringUtil;
 import seedu.whatnow.model.task.ReadOnlyTask;
 import seedu.whatnow.model.task.Task;
+import seedu.whatnow.model.task.Tracker;
 import seedu.whatnow.model.task.UniqueTaskList;
 import seedu.whatnow.model.task.UniqueTaskList.TaskNotFoundException;
 
 import java.util.Set;
+import java.util.Stack;
 import java.util.logging.Logger;
 
 /**
@@ -81,6 +83,11 @@ public class ModelManager extends ComponentManager implements Model {
     public synchronized void updateTask(ReadOnlyTask old, Task toUpdate) throws TaskNotFoundException {
         whatNow.updateTask(old, toUpdate);
         indicateWhatNowChanged();
+    }
+    
+    @Override
+    public synchronized void undoCommand(Stack<Tracker> stackOfTracker) {
+    	
     }
 
     //=========== Filtered Task List Accessors ===============================================================

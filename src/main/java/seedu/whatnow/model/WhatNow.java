@@ -5,6 +5,7 @@ import seedu.whatnow.model.tag.Tag;
 import seedu.whatnow.model.tag.UniqueTagList;
 import seedu.whatnow.model.task.ReadOnlyTask;
 import seedu.whatnow.model.task.Task;
+import seedu.whatnow.model.task.Tracker;
 import seedu.whatnow.model.task.UniqueTaskList;
 
 import java.util.*;
@@ -119,7 +120,9 @@ public class WhatNow implements ReadOnlyWhatNow {
             throw new UniqueTaskList.TaskNotFoundException();
         }
     }
-
+    public boolean undoCommand(Stack<Tracker> stackOfTrackers) {
+    	return false;
+    }
 //// tag-level operations
 
     public void addTag(Tag t) throws UniqueTagList.DuplicateTagException {
