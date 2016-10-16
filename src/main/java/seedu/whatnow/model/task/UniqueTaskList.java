@@ -101,7 +101,7 @@ public class UniqueTaskList implements Iterable<Task> {
      * 
      */
     public boolean undo(Stack<FilteredList<Task>> stackOfFilteredTasks) throws NoPrevCommandFoundException{
-    	FilteredList<Task> tempFilteredTask = stackOfFilteredTasks.pop();
+    	FilteredList<Task> stackOfFilteredTasks = internalList;
     	if(stackOfFilteredTasks.isEmpty()) {
     		throw new NoPrevCommandFoundException();
     	}

@@ -9,7 +9,7 @@ import seedu.whatnow.model.task.UniqueTaskList;
 public class UndoCommand extends Command{
 
 
-	public static final String COMMAND_WORD = "Undo";
+	public static final String COMMAND_WORD = "undo";
 
 	public static final String MESSAGE_USAGE = COMMAND_WORD + ": Reverts to the state of WhatNow"
 			+ "Parameters: None\n"
@@ -20,7 +20,7 @@ public class UndoCommand extends Command{
 	private Stack<FilteredList<Task>> tempTasks;
 
 	public UndoCommand() {
-		tempTasks.push((FilteredList<Task>) UniqueTaskList.getInternalList());
+		tempTasks = new Stack<FilteredList<Task>>();
 	}
 	@Override
 	public CommandResult execute() {
