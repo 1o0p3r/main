@@ -16,27 +16,38 @@ public class Task implements ReadOnlyTask {
     private TaskDate taskDate;
     
     private UniqueTagList tags;
+    
+    private String status;
 
     /**
      * Every field must be present and not null.
      */
+<<<<<<< HEAD
     public Task(Name name, TaskDate taskDate, UniqueTagList tags) {
+=======
+    public Task(Name name, UniqueTagList tags, String status) {
+>>>>>>> 8bc3a7ac4fe132323e728c8ac0560d00ad792005
         assert !CollectionUtil.isAnyNull(name, tags);
         this.name = name;
         this.taskDate = taskDate;
         this.tags = new UniqueTagList(tags); // protect internal tags from changes in the arg list
+        this.status = status;
     }
 
     /**
      * Copy constructor.
      */
     public Task(ReadOnlyTask source) {
+<<<<<<< HEAD
         this(source.getName(), source.getTask(), source.getTags());
     }
     
     @Override
     public TaskDate getTask() {
     	return taskDate;
+=======
+        this(source.getName(), source.getTags(), source.getStatus());
+>>>>>>> 8bc3a7ac4fe132323e728c8ac0560d00ad792005
     }
     @Override
     public Name getName() {
@@ -46,6 +57,11 @@ public class Task implements ReadOnlyTask {
     @Override
     public UniqueTagList getTags() {
         return new UniqueTagList(tags);
+    }
+    
+    @Override
+    public String getStatus() {
+        return status;
     }
 
     /**
@@ -58,8 +74,14 @@ public class Task implements ReadOnlyTask {
     public void setName(Name name) {
         this.name = name;
     }
+<<<<<<< HEAD
     public void setDate(TaskDate taskDate) {
     	this.taskDate = taskDate;
+=======
+    
+    public void setStatus(String status) {
+        this.status = status;
+>>>>>>> 8bc3a7ac4fe132323e728c8ac0560d00ad792005
     }
 
     @Override
@@ -72,7 +94,7 @@ public class Task implements ReadOnlyTask {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, tags);
+        return Objects.hash(name, status, tags);
     }
 
     @Override

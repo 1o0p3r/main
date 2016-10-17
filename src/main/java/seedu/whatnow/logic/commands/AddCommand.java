@@ -38,8 +38,13 @@ public class AddCommand extends Command {
         }
         this.toAdd = new Task(
                 new Name(name),
+<<<<<<< HEAD
                 new TaskDate(taskDate),
                 new UniqueTagList(tagSet)
+=======
+                new UniqueTagList(tagSet),
+                "incomplete"
+>>>>>>> 8bc3a7ac4fe132323e728c8ac0560d00ad792005
         );
     }
 
