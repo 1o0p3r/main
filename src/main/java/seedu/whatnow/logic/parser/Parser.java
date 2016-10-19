@@ -137,20 +137,38 @@ public class Parser {
 	 */
 	private Command prepareAdd(String args){
 		int DESCRIPTION = 1;
-
-		final Matcher matcher = TASK_MODIFIED_WITH_DATE_ARGS_FORMAT.matcher(args.trim());
 		
+		String[] arguments = args.trim().split("\"");
+		
+		if(arguments.length < 2) {
+			return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+		}
+		String [] additionalArgs = null;
+		
+		if (arguments.length > 2) {
+			additionalArgs = arguments[arguments.length - 1].trim().split(" ");
+		}
+		if(additionalArgs[0].equals("on") || additionalArgs[0].equals("by")) {
+			System.out.println("additionalArgs[1] is : " +  additionalArgs[1]);
+			String dateArguments = additionalArgs[1];
+			if(dateArguments.equals(anObject))
+			return new AddCommand()
+		}
+				
+		/*
+		final Matcher matcher = TASK_MODIFIED_WITH_DATE_ARGS_FORMAT.matcher(args.trim());
+		System.out.println("My args in prepare add is : " + args);
 		// Validate args string format
 		if (!TASK_DATA_ARGS_FORMAT.matcher(args).find() && !TASK_MODIFIED_WITH_DATE_ARGS_FORMAT.matcher(args).find()){
 			return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 		}
 		
-		String[] arguments = args.trim().split("\"");
+		String[] arguments = args.trim().split("\"");	//split by quotation
 		
 		if (arguments.length < 2) {
 		    return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 		}
-		
+		System.out.println("my args[2] is : " + arguments[2]);
 		// E.g. add "Buy Milk"
 		if (arguments.length == 2) {
 			try {
@@ -165,7 +183,7 @@ public class Parser {
 		if (arguments.length > 2) {
 			additionalArgs = arguments[arguments.length - 1].trim().split(" ");
 		}
-		
+		System.out.println("args[0] is : " + additionalArgs[0]);
 		if (additionalArgs[0].equals("on") || additionalArgs[0].equals("by")) {
 		    if (additionalArgs.length > 2) {
 		        Set<String> tags = new HashSet<String>();
@@ -209,7 +227,7 @@ public class Parser {
 			return new AddCommand(arguments[DESCRIPTION], tags);
 		} catch (IllegalValueException ive) {
 			return new IncorrectCommand(ive.getMessage());
-		}
+		}*/
 	}
 	
 	/**
