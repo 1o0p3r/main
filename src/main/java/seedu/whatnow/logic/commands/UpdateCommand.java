@@ -257,6 +257,8 @@ public class UpdateCommand extends UndoAndRedo {
 			try {
 				model.updateTask(unwantedTask, (Task) originalTask);
 			} catch(UniqueTaskList.DuplicateTaskException e) {
+				model.getOldTask().pop();
+				model.getNewTask().pop();
 				return new CommandResult(UndoCommand.MESSAGE_FAIL);
 			}
 			return new CommandResult(UndoCommand.MESSAGE_SUCCESS); 
@@ -278,6 +280,8 @@ public class UpdateCommand extends UndoAndRedo {
 			try {
 				model.updateTask(originalTask, (Task) wantedTask);
 			} catch (UniqueTaskList.DuplicateTaskException e) {
+				model.getOldTask().pop();
+				model.getNewTask().pop();
 				return new CommandResult(RedoCommand.MESSAGE_FAIL);
 			}
 			return new CommandResult(RedoCommand.MESSAGE_SUCCESS);

@@ -66,10 +66,12 @@ public class AddCommand extends UndoAndRedo {
 	public CommandResult execute() {
 		assert model != null;
 		try {
-			model.addTask(toAdd);
 			model.getUndoStack().push(this);
 			model.getDeletedStackOfTasksAdd().push(toAdd);
+			model.addTask(toAdd);
 		} catch (UniqueTaskList.DuplicateTaskException e) {
+			model.getUndoStack().pop();
+			model.getDeletedStackOfTasksAdd().pop();
 			return new CommandResult(MESSAGE_DUPLICATE_TASK);
 		}
 		return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
@@ -87,6 +89,8 @@ public class AddCommand extends UndoAndRedo {
 			model.getDeletedStackOfTasksAddRedo().push(reqTask);
 			model.deleteTask(reqTask);
 		} catch (TaskNotFoundException pnfe) {
+			ReadOnlyTask reqTask = model.getDeletedStackOfTasksAddRedo().pop();
+			model.getDeletedStackOfTasksAdd().push(reqTask);
 			return new CommandResult(String.format(UndoCommand.MESSAGE_FAIL));
 		} 
 		return new CommandResult(String.format(UndoCommand.MESSAGE_SUCCESS));
@@ -103,6 +107,7 @@ public class AddCommand extends UndoAndRedo {
 			model.getDeletedStackOfTasksAdd().push(reqTask);
 			model.addTask((Task)reqTask);
 		} catch (DuplicateTaskException e) {
+			ReadOnlyTask reqTask = model.getDeletedStackOfTasksAdd().pop();
 			return new CommandResult(String.format(RedoCommand.MESSAGE_FAIL));
 		}
 		return new CommandResult(String.format(RedoCommand.MESSAGE_SUCCESS));
