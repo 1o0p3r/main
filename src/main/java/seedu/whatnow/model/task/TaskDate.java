@@ -1,4 +1,3 @@
-//@@author A0139128A
 package seedu.whatnow.model.task;
 
 import seedu.whatnow.commons.exceptions.IllegalValueException;
@@ -25,7 +24,7 @@ public class TaskDate {
 			+ "dd/mm/yyyy\n" + "day month year\n" + "today\n" + "tomorrow\n";
 	public static final String EXPIRED_TASK_DATE = "Task Date cannot be in the past!";
 	public static final String INVALID_TASK_DATE_RANGE_FORMAT = "The task date range is invalid!";
-	
+
 	public static final String DATE_ALPHA_WITH_YEAR_VALIDATION_REGEX = "([0-9]{2}+[\\w\\.])+([0-9]{4})";	//To be updated
 	public static final String DATE_ALPHA_WITHOUT_YEAR_VALIDATION_REGEX = "([0-9]{2}+[\\w\\.])";
 
@@ -52,13 +51,41 @@ public class TaskDate {
 	private String fullDate;	
 	private String startDate;
 	private String endDate;
-	
-	/*
-	 * Validates given date
-	 *
-	 * @throw IllegalValueException if given date is invalid
+
+	/**
+	 * A constructor that checks the TaskDate class validity
+	 * @param taskDate is the required single date by user
+	 * @param startDate is the required starting date given by the user
+	 * @param endDate is the required ending date given by the user
+	 * @throws IllegalValueException
+	 * @throws java.text.ParseException
 	 */
 	public TaskDate(String taskDate, String startDate, String endDate) throws IllegalValueException, java.text.ParseException {
+		addDateFormats();
+		if(taskDate == null && startDate != null &&  endDate != null) {
+			if(!isValidDateRange(startDate, endDate)) {
+				throw new IllegalValueException(INVALID_TASK_DATE_RANGE_FORMAT);
+			}
+		} else {
+			if(!isValidDate(taskDate)) {
+				throw new IllegalValueException(MESSAGE_NAME_CONSTRAINTS);
+			}
+			if(taskDate.equals("today")) {
+				DateFormat dateFormat = new SimpleDateFormat(DATE_NUM_SLASH_WITH_YEAR_FORMAT);
+				Calendar cal = Calendar.getInstance();
+				taskDate = dateFormat.format(cal.getTime());
+				fullDate = taskDate;
+			}
+			else if(taskDate.equals("tomorrow")) {
+				DateFormat dateFormat2 = new SimpleDateFormat(DATE_NUM_SLASH_WITH_YEAR_FORMAT);
+				Calendar cal2 = Calendar.getInstance();
+				cal2.add(Calendar.DATE, 1);
+				taskDate = dateFormat2.format(cal2.getTime());
+				fullDate = taskDate;
+			}
+		}
+	}
+	void addDateFormats() {
 		ListOfDateRegex = new ArrayList<String>();
 		ListOfDateFormat = new ArrayList<String>();
 		ListOfDateRegex.add(DATE_NUM_SLASH_WITH_YEAR_VALIDATION_REGEX);
@@ -75,36 +102,9 @@ public class TaskDate {
 		ListOfDateFormat.add(DATE_NUM_SLASH_WITHOUT_YEAR_FORMAT);
 		ListOfDateFormat.add(DATE_AlPHA_WHITESPACE_WITH_YEAR_FORMAT);
 		ListOfDateFormat.add(DATE_ALPHA_WHITESPACE_WITHOUT_YEAR_FORMAT);
-		
-		if(taskDate == null && startDate != null &&  endDate != null) {
-			if(!isValidDateRange(startDate, endDate)) {
-				throw new IllegalValueException(INVALID_TASK_DATE_RANGE_FORMAT);
-			}
-		}
-		else {
-			if(!isValidDate(taskDate)) {
-				throw new IllegalValueException(MESSAGE_NAME_CONSTRAINTS);
-			}
-			//Formats the date to be today's date
-			if(taskDate.equals("today")) {
-				DateFormat dateFormat = new SimpleDateFormat(DATE_NUM_SLASH_WITH_YEAR_FORMAT);
-				Calendar cal = Calendar.getInstance();
-				taskDate = dateFormat.format(cal.getTime());
-				fullDate = taskDate;
-			}
-			//Formats the date to be tomorrow's date
-			else if(taskDate.equals("tomorrow")) {
-				DateFormat dateFormat2 = new SimpleDateFormat(DATE_NUM_SLASH_WITH_YEAR_FORMAT);
-				Calendar cal2 = Calendar.getInstance();
-				cal2.add(Calendar.DATE, 1);
-				taskDate = dateFormat2.format(cal2.getTime());
-				fullDate = taskDate;
-			}
-		}
 	}
-
 	/**
-	 * 
+	 * Checks if a date is given is valid
 	 * @param test is a given user date input
 	 * @return the validity of the user date input by passing it to methods of different regex
 	 * @throws java.text.ParseException
@@ -113,8 +113,7 @@ public class TaskDate {
 	public boolean isValidDate(String reqDate) throws java.text.ParseException, IllegalValueException {	
 		if(reqDate.equals("today") || reqDate.equals("tomorrow")) {
 			return true;
-		}
-		else {
+		} else {
 			for(int i = 0 ; i < ListOfDateFormat.size() && i < ListOfDateRegex.size(); i++) {
 				if(reqDate.matches(ListOfDateRegex.get(i))) {
 					return isValidNumDate(reqDate, ListOfDateFormat.get(i));
@@ -166,7 +165,7 @@ public class TaskDate {
 		b.set(Calendar.MINUTE, 59);
 		b.set(Calendar.SECOND, 59);
 		beginDate = b.getTime();
-		
+
 		Calendar a = new GregorianCalendar();
 		a.setTime(beginDate);
 		a.set(Calendar.HOUR_OF_DAY, 23);
@@ -174,25 +173,25 @@ public class TaskDate {
 		a.set(Calendar.SECOND, 59);
 		finishDate = a.getTime();
 		
-		//Following checks if the user input date is invalid i.e before today's date
+		/**Following checks if the user input date is invalid i.e before today's date */
 		Calendar c = new GregorianCalendar();
 		c.set(Calendar.HOUR_OF_DAY, 00);
 		c.set(Calendar.MINUTE, 00);
 		c.set(Calendar.SECOND, 00);
 		Date currDate = c.getTime();
-		
+
 		if(currDate.compareTo(beginDate) > 0 || currDate.compareTo(finishDate) > 0) {
 			return false;
 		}
 		else if(!validDateRange && !sameDate) {
 			return false;
-		}
-		else {
+		} else {
 			startDate = beforeDate;
 			endDate = afterDate;
 			return true;
 		}
 	}
+	
 	
 	/**
 	 * 
@@ -201,10 +200,11 @@ public class TaskDate {
 	 * @return the validity of format of the user date input and validity i.e. existence of the date input
 	 * @throws java.text.ParseException
 	 */
+	//@@author A0139128A-unused
 	public boolean isValidAlphaDate(String test, String format) throws java.text.ParseException {
 		Date tempDate = null;
 
-		//Following will check if the user input date is valid in terms of numerical value i.e. 32nd november
+		/**Following will check if the user input date is valid in terms of numerical value i.e. 32nd november */
 		try {
 			DateFormat dateFormat = new SimpleDateFormat(format);
 			tempDate = dateFormat.parse(test);
@@ -215,7 +215,7 @@ public class TaskDate {
 			ex.printStackTrace();
 			return false;
 		}
-		//Following checks if the user input date is invalid i.e before today's date
+		/**Following checks if the user input date is invalid i.e before today's date */
 		Calendar c = new GregorianCalendar();
 		c.set(Calendar.HOUR_OF_DAY, 23);
 		c.set(Calendar.MINUTE, 59);
@@ -224,7 +224,7 @@ public class TaskDate {
 		if(currDate.compareTo(tempDate) > 0) {
 			return false;
 		}
-		//Following ensures that the date format keyed in the user will be converted to DATE_NUM_SLASH_WITH_YEAR_FORMAT
+		/**Following ensures that the date format keyed in the user will be converted to DATE_NUM_SLASH_WITH_YEAR_FORMAT */
 		if(format.equals(DATE_AlPHA_WHITESPACE_WITH_YEAR_FORMAT)) {
 			String tempToGetMonth;
 			String[] splitted = test.split("\\s+");
@@ -254,8 +254,7 @@ public class TaskDate {
 			String requiredDate = splitted[0];
 			requiredDate.concat(year);
 			return true;
-		}
-		else
+		} else
 			return false;
 	}
 	/**
@@ -265,6 +264,7 @@ public class TaskDate {
 	 * @throws java.text.ParseException
 	 * @throws IllegalValueException 
 	 */
+	//@@author A0139128A
 	public boolean isValidNumDate(String test, String format) throws java.text.ParseException, IllegalValueException {
 		Date inputDate = null;
 		try {
@@ -276,26 +276,26 @@ public class TaskDate {
 			ex.printStackTrace();
 			return false;
 		}
-		
+
 		Calendar d = new GregorianCalendar();
 		d.setTime(inputDate);
 		d.set(Calendar.HOUR_OF_DAY, 23);
 		d.set(Calendar.MINUTE, 59);
 		d.set(Calendar.SECOND, 59);
 		inputDate = d.getTime();
-		
-		//Following checks if the user input date is invalid i.e before today's date
+
+		/**Following checks if the user input date is invalid i.e before today's date */
 		Calendar c = new GregorianCalendar();
 		c.set(Calendar.HOUR_OF_DAY, 00);
 		c.set(Calendar.MINUTE, 00);
 		c.set(Calendar.SECOND, 00);
 		Date currDate = c.getTime();
-		
+
 		if(currDate.compareTo(inputDate) > 0) {
-		    throw new IllegalValueException(EXPIRED_TASK_DATE);
+			throw new IllegalValueException(EXPIRED_TASK_DATE);
 		}
-		
-		//The following will ensure the date format to be DATE_NUM_SLASH_WITH_YEAR_FORMAT
+
+		/**The following will ensure the date format to be DATE_NUM_SLASH_WITH_YEAR_FORMAT */
 		if(format.equals(DATE_NUM_SLASH_WITHOUT_YEAR_FORMAT)) {
 			Calendar now = Calendar.getInstance();
 			int yearInt = now.get(Calendar.YEAR);
@@ -319,8 +319,7 @@ public class TaskDate {
 			String[] split = toReplaceFullDate.split("/");
 			fullDate = "0"+ split[0] + "/0" + split[1] + "/" + split[2];
 			return true;
-		}
-		else {
+		} else {
 			fullDate = test;
 			return true;
 		}
@@ -329,15 +328,15 @@ public class TaskDate {
 	public String toString() {
 		if(fullDate == null) {
 			return startDate + " "  + endDate;
-		}
-		else {
+		} else {
 			return fullDate;
 		}
 	}
+	//@author A0139128A-reused
 	@Override
 	public boolean equals(Object other) {
-		return other == this // short circuit if same object
-				|| (other instanceof TaskDate // instanceof handles nulls
+		return other == this 
+				|| (other instanceof TaskDate 
 						&& this.fullDate.equals(((TaskDate) other).fullDate)); // state check
 	}
 	/** Returns the fullDate */

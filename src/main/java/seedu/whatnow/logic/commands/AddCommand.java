@@ -1,4 +1,3 @@
-//@@author A0139772U
 package seedu.whatnow.logic.commands;
 
 import java.text.ParseException;
@@ -16,9 +15,9 @@ import seedu.whatnow.model.task.UniqueTaskList.TaskNotFoundException;
  * Adds a task to WhatNow.
  */
 public class AddCommand extends UndoAndRedo {
-
+	//@@author A0139772U
 	public static final String COMMAND_WORD = "add";
-
+	//@@author A0139772U
 	public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a task to WhatNow. \n"
 			+ "Parameters: \"TASK_NAME\" [t/TAG]...\n"
 	        + "Parameters: \"TASK_NAME\" [on/by/from] [today/tomorrow/DATE] [to] [today/tomorrow/DATE] [t/TAG]...\n"
@@ -28,7 +27,7 @@ public class AddCommand extends UndoAndRedo {
 			+ COMMAND_WORD + " \"Buy dinner\" at 6pm t/highPriority\n"
 			+ COMMAND_WORD + " \"Lesson\" on 24/2/2017 from 8.30am to 4:30pm t/lowPriority\n"
 			+ COMMAND_WORD + " \"Submit homework\" by tomorrow 12pm t/lowPriority\n";
-
+	//@@author A0139772U
 	public static final String MESSAGE_SUCCESS = "New task added: %1$s";
 	public static final String MESSAGE_DUPLICATE_TASK = "This task already exists in WhatNow";
 	private static final String STATUS_INCOMPLETE = "incomplete";
@@ -77,7 +76,7 @@ public class AddCommand extends UndoAndRedo {
 		}
 		return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
 	}
-	
+	//@@author A0139128A
 	@Override
 	public CommandResult undo() {
 		assert model != null;
@@ -93,7 +92,7 @@ public class AddCommand extends UndoAndRedo {
 		} 
 		return new CommandResult(String.format(UndoCommand.MESSAGE_SUCCESS));
 	}
-	
+	//@@author A0139128A
 	@Override
 	public CommandResult redo() {
 		assert model != null;
