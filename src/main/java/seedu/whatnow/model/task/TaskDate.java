@@ -90,7 +90,7 @@ public class TaskDate {
     private static final int INCREASE_DATE_BY_ONE_DAY = 1;
     private static final int INCREASE_DATE_BY_SEVEN_DAYS = 7;
 
-    // @@author A0139128A
+    //@@author A0139128A
     /**
      * Validates given date
      *
@@ -227,7 +227,7 @@ public class TaskDate {
                 validDateRange = true;
             } else {
                 if (convertedFromDay) {
-                    afterDate = isBeforeEarlierThanAfter(finishDate);
+                    afterDate = assignAfterDateDay(finishDate);
                     finishDate = sdf.parse(afterDate);
                     if (beginDate.before(finishDate)) {
                         validDateRange = true;
@@ -275,7 +275,7 @@ public class TaskDate {
     /**
      * returns a week ahead of the input date when a day is entered
      */
-    private static String isBeforeEarlierThanAfter(Date finishDate) {
+    private static String assignAfterDateDay(Date finishDate) {
 
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_NUM_SLASH_WITH_YEAR_FORMAT);
         Calendar cal = Calendar.getInstance();
